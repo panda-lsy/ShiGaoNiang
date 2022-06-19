@@ -3,12 +3,14 @@ import wx
 import os
 import urllib.request
 import random
+import time
+import sys
 
 class myframe(wx.Frame):
     def __init__(self):
         super().__init__(parent=None,pos=wx.DefaultPosition,style=wx.FRAME_SHAPED|wx.FRAME_NO_TASKBAR, size=(150,150))
 
-        self.bg = wx.Bitmap("images/iconsmall.png", wx.BITMAP_TYPE_PNG)  # 石膏娘的图片 
+        self.bg = wx.Bitmap("images\\iconsmall.png", wx.BITMAP_TYPE_PNG)  # 石膏娘的图片 
         region = wx.Region(self.bg)
         self.SetShape(region)
         path = wx.GraphicsRenderer.GetDefaultRenderer().CreatePath()
@@ -24,27 +26,32 @@ class myframe(wx.Frame):
        
         # 鼠标左键按下时控制台输出坐标,屏幕输出诗词弹幕     
     def OnLeftClickDown(self, event):
-        global name
+        #print('左键')
+        '''global name'''
         self.pt = event.GetPosition()
         pos = self.GetPosition()
         print((pos.x,pos.y))
         print((-pos.x,-pos.y))
-        if not os.path.exists('images/cache'):
-            os.makedirs('images/cache')
-        path = "images/cache/"
+        '''if not os.path.exists('images\\cache'):
+            os.makedirs('images\\cache')
+        path = "images\\cache\\"
         url = "https://v1.jinrishici.com/all.png"
-        name = path + str(random.randint(1,142857)) +'.png'
+        number = str(random.randint(1,142857))
+        name = path + number +'.png'
         #保存文件时候注意类型要匹配，如要保存的图片为jpg，则打开的文件的名称必须是jpg格式，否则会产生无效图片
         conn = urllib.request.urlopen(url)
         f = open(name,'wb')
         f.write(conn.read())
         f.close()
         print('Pic Saved!') 
-        desktop_path = "images/cache/"  # 新创建的txt文件的存放路径
-        full_path = desktop_path + 'names.txt'  # 也可以创建一个.doc的word文档
+        full_path = 'images\\names.txt'  # 也可以创建一个.doc的word文档
         file = open(full_path, 'w')
-        file.write(name)   #msg也就是下面的Hello world!
-        os.popen('danmu.py')
+        path = "cache\\"
+        readname = path + str(number)+'.png'
+        file.write(readname) 
+        file.close() 
+        os.popen('images\Danmaku.exe')'''
+        
 
 
         
@@ -55,6 +62,8 @@ class myframe(wx.Frame):
         # 石膏娘拖拽
     def OnMouseMotion(self, event):
         if event.Dragging() and event.LeftIsDown():
+            pos = self.GetPosition()
+            self.pt = event.GetPosition()
             pos = self.ClientToScreen(event.GetPosition())
             self.Move((pos.x-self.pt.x, pos.y-self.pt.y))
         
